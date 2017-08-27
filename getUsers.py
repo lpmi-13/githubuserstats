@@ -1,12 +1,9 @@
 from github import Github
-import os, yaml
+import os
 import psycopg2
 
-with open('db_config.yaml', 'r') as PGyamlfile:
-    PGcreds = yaml.load(PGyamlfile)
-
 #connect to postgres and get the highest user inserted
-conn = psycopg2.connect("dbname='github' user='{}' password='{}' host='localhost'".format(PGcreds['username'], PGcreds['password']))
+conn = psycopg2.connect("dbname='github' user='{}' password='{}' host='localhost'".format(os.environ['DB_USERNAME'], os.environ['DB_PASSWORD']))
 cursor = conn.cursor()
 
 cursor.execute('select UserId from users ORDER BY UserId DESC LIMIT 1;')
