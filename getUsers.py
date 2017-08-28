@@ -1,6 +1,7 @@
 from github import Github
 import yaml
 import psycopg2
+from rateLimit import return_rate_limit
 
 with open('config.yaml', 'r') as GHyamlfile:
     GHcreds = yaml.load(GHyamlfile)
@@ -33,6 +34,8 @@ for user in user_list:
     cursor.execute('INSERT INTO users (userid, login) VALUES (%s, %s)', (user.id, user.login))
     conn.commit()
     print('inserted entry for user {} into the DB'.format(user.id))
+    rate = return_rate_limit(g)
+    print('rate limit info: {}'.format(rate))
     #get events per user (a merged PR is a type of event in Github)
 #    events = user.get_events()
 #    PR_ids = [event.id for event in events if event == 'PullRequestEvent']
