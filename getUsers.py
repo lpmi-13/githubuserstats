@@ -1,6 +1,7 @@
 from github import Github
 import os
 import psycopg2
+from rateLimit import return_rate_limit
 
 #connect to postgres and get the highest user inserted
 conn = psycopg2.connect("dbname='github' user='{}' password='{}' host='localhost'".format(os.environ['DB_USERNAME'], os.environ['DB_PASSWORD']))
@@ -20,12 +21,17 @@ g = Github(os.environ['GITHUB_USERNAME'], os.environ['GITHUB_PASSWORD'], timeout
 user_list = g.get_users(since=highest_user_id)
 
 for user in user_list:
-    #get the specific user info
-    user = g.get_user(user.login)
+    #check rate limit
+    rate = return_rate_limit(g)
+    print('remaining API calls this hour: {}'.format(rate))
 
-    #place user info in the DB for later
-    cursor.execute('INSERT INTO users (userid, login) VALUES (%s, %s)', (user.id, user.login))
-    conn.commit()
-    print('inserted entry for user {} into the DB'.format(user.id))
+    while(rate > 4950):
+        #get the specific user info
+        user = g.get_user(user.login)
+    
+        #place user info in the DB for later
+        cursor.execute('INSERT INTO users (userid, login) VALUES (%s, %s)', (user.id, user.login))
+        conn.commit()
+        print('inserted entry for user {} into the DB'.format(user.id))
 
 conn.close()
