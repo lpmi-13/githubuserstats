@@ -2,6 +2,7 @@ from github import Github
 import os
 import psycopg2
 from rateLimit import return_rate_limit
+from datetime import datetime
 
 #connect to postgres and get the highest user inserted
 conn = psycopg2.connect("dbname='github' user='{}' password='{}' host='localhost'".format(os.environ['DB_USERNAME'], os.environ['DB_PASSWORD']))
@@ -24,8 +25,10 @@ for user in user_list:
     #check rate limit
     rate = return_rate_limit(g)
     print('remaining API calls this hour: {}'.format(rate))
+    print('{}'.format(str(datetime.now())))
 
-    while(rate > 4950):
+
+    if(rate > 250):
         #get the specific user info
         user = g.get_user(user.login)
     
