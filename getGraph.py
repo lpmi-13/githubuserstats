@@ -34,27 +34,7 @@ with open('results.txt', 'w') as outputfile:
                 continue
         
         # get all unique repos that have merged PRs from the user
-        unique_repos_to_write = set(all_repos)
+        unique_repos_to_write = set(all_repos_for_user)
 
-        outputfile.write('USER: {}'.format(user_name))
-
-        # put the total unique repos by user into the dictionary
-        all_users[user_name] = len(unique_repos_to_write)
-
-        outputfile.write('\n\n')
-        
-        # write out the list of actual repos since we may want to show it later
-        outputfile.write(str(repos_to_write))
-        outputfile.write('\n\n')
-
-        # write out the total unique repos as a number
-        outputfile.write('number of repos contributed to excluding own: {}'.format(len(repos_to_write)))
-        outputfile.write('\n\n')
-
-# sort the ditionary by total unique repos for display later
-items = [(v, k) for k, v in all_users.items()]
-items.sort()
-items.reverse()
-items = [(k, v) for v, k in items]
-for item in items:
-    print(item)
+        outputfile.write('{},{}'.format(user_name, len(unique_repos_to_write)))
+        outputfile.write('\n')
