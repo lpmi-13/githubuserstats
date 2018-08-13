@@ -20,11 +20,11 @@ contributions by merged PR into a unique repo not owned by the PR author.
 for example:
 
 user `foo` has the following merged PRs:
-`https://github.com/foo/ownRepo/pull/12`
-`https://github.com/foo/ownRepo/pull/16`
-`https://github.com/bar/newProject/pull/3`
-`https://github.com/bar/newProject/pull/5`
-`https://github.com/baz/oldProject/pull/8`
+- `https://github.com/foo/ownRepo/pull/12`
+- `https://github.com/foo/ownRepo/pull/16`
+- `https://github.com/bar/newProject/pull/3`
+- `https://github.com/bar/newProject/pull/5`
+- `https://github.com/baz/oldProject/pull/8`
 
 the score for the metric would be 2, since there are two commits to `bar/newProject`,
 but it's the same repo, so that only gets counted once. `baz/oldProject` is also
@@ -43,7 +43,7 @@ had the time yet.
 
 ## basic overview of data flow
 
-### `getMergedPRs.py`
+### 1) `getMergedPRs.py`
 
 - reads in from `baseline_data/git-users.json`
 - iterates through the users and calls the Github search API for all the user's issues which are PRs
@@ -51,7 +51,7 @@ had the time yet.
 - if the PR was merged, saves the issue's html url as well as the date merged for later filtering
 - writes the saved data to `data/` folder as `USER_LOGIN-results` (one repo url and date per line)
 
-### `getGraph.py`
+### 2) `getGraph.py`
 
 - opens the output of the above process (grabbing each file from the `/data` directory)
 - for each user result file, checks if the user login is the same as the owner of the repo
