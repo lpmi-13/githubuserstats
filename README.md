@@ -28,7 +28,7 @@ user `foo` has the following merged PRs:
 
 the score for the metric would be 2, since there are two commits to `bar/newProject`,
 but it's the same repo, so that only gets counted once. `baz/oldProject` is also
-a repo not owned by `foo`, so that gets an additonal point. Both of the merged PRs
+a repo not owned by `foo`, so that gets an additional point. Both of the merged PRs
 to `foo/ownRepo` are owned by the PR author, so they don't count in the metric.
 
 ## output
@@ -37,9 +37,12 @@ currently takes hardcoded userdata (taken from the very excellent
 [Gist by Paul Miller](https://gist.github.com/paulmillr/2657075)) and outputs
 values for this particular metric
 
-eventually hoping to have an online portal for browsing the output as well as adding
-in a particular github username to be included in the results, but just haven't
-had the time yet.
+Version 1 of the frontend for this is currently living at
+[https://statsbuffet.party](https://statsbuffet.party).
+
+eventually hoping to add ability to enter in a particular github
+username to be included in the results, but just haven't had the
+time yet.
 
 ## basic overview of data flow
 
