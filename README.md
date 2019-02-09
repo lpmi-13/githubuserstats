@@ -46,7 +46,7 @@ time yet.
 
 ## basic overview of data flow
 
-### 1) `getMergedPRs.py`
+### 1) `get_Merged_PRs.py`
 
 - reads in from `baseline_data/git-users.json`
 - iterates through the users and calls the Github search API for all the user's issues which are PRs
@@ -54,7 +54,7 @@ time yet.
 - if the PR was merged, saves the issue's html url as well as the date merged for later filtering
 - writes the saved data to `data/` folder as `USER_LOGIN-results` (one repo url and date per line)
 
-### 2) `getGraph.py`
+### 2) `get_Graph_all_Unique.py`
 
 - opens the output of the above process (grabbing each file from the `/data` directory)
 - for each user result file, checks if the user login is the same as the owner of the repo
