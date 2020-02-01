@@ -13,17 +13,17 @@ user_pattern = re.compile('([a-zA-Z0-9-\._]+)-results')
 all_users = {}
 
 with open('results.txt', 'w') as outputfile:
-    
+
     for user_file in all_files:
-    
+
         user_match = user_pattern.search(user_file)
         user_name = user_match.group(1)
-    
+
         with open(os.path.join(DATA_DIR, user_file), 'r') as gitfile:
             data = gitfile.read()
-        
+
         all_repos_for_user = []
-        
+
         for repo in data.split('\n'):
             result = git_pattern.search(repo)
             try:
@@ -32,7 +32,7 @@ with open('results.txt', 'w') as outputfile:
                     all_repos_for_user.append(result.group(2))
             except:
                 continue
-        
+
         # get all unique repos that have merged PRs from the user
         unique_repos_to_write = set(all_repos_for_user)
 

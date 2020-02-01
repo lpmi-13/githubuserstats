@@ -1,5 +1,6 @@
 *.yaml
 __pycache__
 data
+scrubbed
 *.txt
 *.js
