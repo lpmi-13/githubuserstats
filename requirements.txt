@@ -1,2 +1,2 @@
 psycopg2==2.7.3
-PyGithub==1.35
+oyaml==0.9

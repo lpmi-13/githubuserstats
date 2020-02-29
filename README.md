@@ -13,38 +13,35 @@ I felt like christening a new metric, primarily as a way to start a conversation
 about open source contributions, but also selfishly as one that exaggerates 
 the contributions via pypobot.
 
+An article I wrote about it, explaining in a bit more detail, is [here](https://medium.com/@leskis/why-the-github-metric-monoculture-d179a2f1d130).
+
+### historical note
+
+- the original version of the data collection used the GitHub API directly, querying specific users with no way to "get all users"
+- this currently lives in the `legacy` branch, if you're interested
+
 ## what does it measure?
 
 contributions by merged PR into a unique repo not owned by the PR author.
 
 ## output
 
-currently takes hardcoded userdata (taken from the very excellent
-[Gist by Paul Miller](https://gist.github.com/paulmillr/2657075)) and outputs
-values for this particular metric
-
-eventually hoping to have an online portal for browsing the output as well as adding
-in a particular github username to be included in the results, but just haven't
-had the time yet.
+sends everything into a postgres DB that can be used to populate a frontend.
 
 ## basic overview of data flow
 
-### `getMergedPRs.py`
+### GH Archive https://www.gharchive.org/
 
-- reads in from `baseline_data/git-users.json`
-- iterates through the users and calls the Github search API for all the user's issues with are PRs
-- checks to see if the PR is merged
-- if the PR was merged, saves the issue's html url as well as the date merged for later filtering
-- writes the saved data to `data/` folder as `USER_LOGIN-results` (one repo url and date per line)
+- supplies data in json format from the Timeline API (pre-2015) and the Events API (post-2015)
+- the API isn't 100% stable/predictable prior to 2015, so that's why the python scripts have all the try/except blocks
 
-### `getGraph.py`
+### `grab_gharchive.sh`
 
-- opens the output of the above process (grabbing each file from the `/data` directory)
-- for each user result file, check if the user login is the same as the owner of the repo
-(currently done via looking at the value after `https://github.com/` in the issue URL
-- if the user login and owner are not the same, add the issue to the list of repos contributed to
-- make this list a set to filter for unique repos
-- write this result to `results.txt`
+- pulls down data from the GitHub archive (in gzipped json format), one month at a time (the more recent months can total over 10GB of data)
+- unzips and passes each json file into `convert_data.py`
+- removes the raw data files
 
-...this is currently as far as the data is processed, though would be nice to eventually
-put the results into a data store or something, then make available via an API.
+### `convert_data.py`
+
+- reads in the raw json, and filters for merged PRs to repos where the owner is not the same as the author
+- saves some data about those (repo url, PR url, author's username, unique identifier), and writes out to a json file

@@ -1,6 +1,8 @@
 *.yaml
 baseline_data
-__pycache__
+cleaned_data
+raw_data
 data
+__pycache__
 *.txt
 *.js
